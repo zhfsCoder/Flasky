@@ -1,12 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Index{% endblock %}
-{% block head%}
-{{ super() }}
-<style>
+{% block title %}Flasky{% endblock %}
 
-</style>
-{% endblock %}
-
-{% block body%}
-<h2>Hello test.</h2>
+{% block page_content%}
+<div class="page-header">
+    <h1>Hello, {{ name }}!</h1>
+</div>
 {% endblock%}

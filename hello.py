@@ -1,14 +1,31 @@
 #-*- coding:utf-8 -*-
 
 from flask import Flask, request, render_template
+from flask_bootstrap import Bootstrap
+from flask_moment import Moment 
+from datetime import datetime
 
 app=Flask(__name__)
+bootstrap = Bootstrap(app)
+moment = Moment(app)
 
 mydict = {'key':123, 'hha':'231'}
 
-@app.route('/test')
-def test():
-    return render_template('test.html')
+@app.route('/datetime')
+def show_datetime():
+    return render_template('index.html', current_time=datetime.utcnow())
+
+@app.route('/test/<name>')
+def test(name):
+    return render_template('test.html', name=name)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
 
 @app.route('/')
 def index():
