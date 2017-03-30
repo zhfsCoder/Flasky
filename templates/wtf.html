@@ -1,0 +1,8 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{{ wtf.quick_form(form) }}
+
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.name.label }}{{ form.name() }}
+    {{ form.submit() }}
+</form>

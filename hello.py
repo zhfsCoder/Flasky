@@ -4,13 +4,17 @@ from flask import Flask, request, render_template
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment 
 from datetime import datetime
+from flask_wtf import Form
+from wtforms import StringField, SubmitField
+from wtforms.validators import Required
 
 app=Flask(__name__)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 
-mydict = {'key':123, 'hha':'231'}
+app.config['SECRET_KEY'] = 'hard to guess string'
 
+'''
 @app.route('/datetime')
 def show_datetime():
     return render_template('index.html', current_time=datetime.utcnow())
@@ -18,6 +22,7 @@ def show_datetime():
 @app.route('/test/<name>')
 def test(name):
     return render_template('test.html', name=name)
+'''
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -27,10 +32,17 @@ def page_not_found(e):
 def internal_server_error(e):
     return render_template('500.html'), 500
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    name = None
+    form = NameForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        form.name.data = ''
+    return render_template('index.html', form=form, name=name)
 
+
+'''
 @app.route('/reuser/<name>')
 def reuser(name):
     return render_template('user.html', name=name)
@@ -43,6 +55,12 @@ def agent():
 @app.route('/user/<name>')
 def user(name):
     return 'Hello %s' % name
+
+'''
+
+class NameForm(Form):
+    name = StringField('What is your name?', validators=[Required()])
+    submit = SubmitField('submit')
 
 if __name__ == '__main__':
     app.run(debug=True)
